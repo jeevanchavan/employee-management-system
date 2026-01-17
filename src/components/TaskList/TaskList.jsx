@@ -8,12 +8,22 @@ const TaskList = ({data}) => {
   return (
     <div id='task' className=' overflow-x-auto w-full h-[60%] flex items-center justify-start gap-5 mt-10 py-5'>
         
-        <AcceptTask />
-        <NewTask/>
+        {data.tasks.map((elem,idx)=>{
+            
+            if(elem.active){
+                return <AcceptTask key={idx} />
+            }
+            if(elem.newTask){
+                return <NewTask key={idx}  />
+            }
+            if(elem.completed){
+                return <CompleteTask key={idx}  />
+            }
+            if(elem.failed){
+                return <FailedTask key={idx}  />
+            }
+        })}
 
-        <CompleteTask />
-        <FailedTask/>
-        
         
     </div>
   )
