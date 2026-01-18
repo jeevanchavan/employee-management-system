@@ -11,15 +11,17 @@ const App = () => {
   const [loggedInUserData, setLoggedInUserData] = useState(null)
   const authData = useContext(AuthContext)
   
-  // useEffect(() => {
-  //   if(authData){
-  //     const loggedInUser = localStorage.getItem('loggedInUser');
-
-  //     if(loggedInUser){
-  //       setUser(loggedInUser.role);
-  //     }
-  //   }
-  // }, [authData])
+  useEffect(()=>{
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    
+    if(loggedInUser){
+      const userData =  JSON.parse(loggedInUser)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setUser(userData.role)
+      setLoggedInUserData(userData.data)
+    }
+      
+  },[])
   
 
   const handleLogin =(email,password)=>{
@@ -27,12 +29,12 @@ const App = () => {
       setUser('admin')
       localStorage.setItem('loggedInUser',JSON.stringify({role:'admin'}));
     }
-    else if(authData){
+    else if(authData?.employees){
       const employee = authData.employees.find((e)=> e.email == email && e.password == password)
       if(employee){
         setUser("employee")
         setLoggedInUserData(employee)
-        localStorage.setItem('loggedInUser',JSON.stringify({role:'employee'}));
+        localStorage.setItem('loggedInUser',JSON.stringify({role:'employee',data:employee}));
       }
     }
     else{
